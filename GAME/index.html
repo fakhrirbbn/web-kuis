@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game Kuis Pilihan Ganda</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+      background-color: #ffe6e6;
+    }
+
+    h1 {
+      color: #e60000;
+    }
+
+    p {
+      color: #cc0000;
+    }
+
+    input, label {
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    button {
+      padding: 12px 24px;
+      font-size: 16px;
+      background-color: #cc0000;
+      color: #fff;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #990000;
+    }
+
+    #quiz-container {
+      width: 60%;
+      margin: 20px auto;
+      text-align: left;
+      border: 2px solid #990000;
+      padding: 20px;
+      background-color: #fff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+
+    #result {
+      font-size: 20px;
+      margin-top: 20px;
+      color: #cc0000;
+    }
+
+    #restart-btn {
+      margin-top: 20px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Game Kuis Pilihan Ganda</h1>
+  <div id="quiz-container">
+    <p id="question"></p>
+    <form id="quiz-form">
+      <label>
+        <input type="radio" name="choice" value="A" />
+        <span id="choiceA"></span>
+      </label>
+      <label>
+        <input type="radio" name="choice" value="B" />
+        <span id="choiceB"></span>
+      </label>
+      <label>
+        <input type="radio" name="choice" value="C" />
+        <span id="choiceC"></span>
+      </label>
+      <button type="button" onclick="checkAnswer()">Jawab</button>
+    </form>
+  </div>
+
+  <div id="result"></div>
+  <button id="restart-btn" onclick="restartGame()">Ulangi Permainan</button>
+
+  <script>
+    var questions = [
+      { 
+        question: "Apa ibukota Indonesia?",
+        choices: {
+          A: "Jakarta",
+          B: "Bandung",
+          C: "Surabaya"
+        },
+        correctAnswer: "A"
+      },
+      { 
+        question: "Berapakah 10 ditambah 5?",
+        choices: {
+          A: "12",
+          B: "15",
+          C: "20"
+        },
+        correctAnswer: "B"
+      },
+      { 
+        question: "Siapakah presiden Indonesia saat ini?",
+        choices: {
+          A: "Joko Widodo",
+          B: "Susilo Bambang Yudhoyono",
+          C: "Megawati Soekarnoputri"
+        },
+        correctAnswer: "A"
+      },
+      { 
+        question: "Apa nama benua terbesar di dunia?",
+        choices: {
+          A: "Asia",
+          B: "Afrika",
+          C: "Eropa"
+        },
+        correctAnswer: "A"
+      },
+      { 
+        question: "Berapakah hasil dari 8 dikurangi 3?",
+        choices: {
+          A: "2",
+          B: "5",
+          C: "8"
+        },
+        correctAnswer: "B"
+      },
+      { 
+        question: "Manakah yang bukan termasuk planet di tata surya kita?",
+        choices: {
+          A: "Mars",
+          B: "Venus",
+          C: "Pluto"
+        },
+        correctAnswer: "C"
+      },
+      { 
+        question: "Apa nama sungai terpanjang di dunia?",
+        choices: {
+          A: "Nile",
+          B: "Amazon",
+          C: "Yangtze"
+        },
+        correctAnswer: "A"
+      },
+      { 
+        question: "Berapa banyak negara yang ada di dunia saat ini?",
+        choices: {
+          A: "150",
+          B: "195",
+          C: "220"
+        },
+        correctAnswer: "B"
+      },
+      { 
+        question: "Siapa penemu bola lampu?",
+        choices: {
+          A: "Thomas Edison",
+          B: "Alexander Graham Bell",
+          C: "Nikola Tesla"
+        },
+        correctAnswer: "A"
+      },
+      { 
+        question: "Apa warna langit pada siang hari?",
+        choices: {
+          A: "Merah",
+          B: "Biru",
+          C: "Hijau"
+        },
+        correctAnswer: "B"
+      },
+    ];
+
+    var currentQuestionIndex = 0;
+    var score = 0;
+
+    // Menampilkan pertanyaan dan pilihan saat halaman dimuat
+    function displayQuestion() {
+      var currentQuestion = questions[currentQuestionIndex];
+      document.getElementById('question').innerHTML = currentQuestion.question;
+      document.getElementById('choiceA').innerHTML = 'A. ' + currentQuestion.choices.A;
+      document.getElementById('choiceB').innerHTML = 'B. ' + currentQuestion.choices.B;
+      document.getElementById('choiceC').innerHTML = 'C. ' + currentQuestion.choices.C;
+    }
+
+    // Fungsi untuk memeriksa jawaban
+    function checkAnswer() {
+      var selectedChoice = document.querySelector('input[name="choice"]:checked');
+
+      if (selectedChoice) {
+        if (selectedChoice.value === questions[currentQuestionIndex].correctAnswer) {
+          score++;
+        }
+
+        // Pindah ke pertanyaan berikutnya atau menampilkan skor akhir
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+          displayQuestion();
+        } else {
+          showResult();
+        }
+      } else {
+        alert('Pilih salah satu jawaban.');
+      }
+    }
+
+    // Menampilkan skor akhir
+    function showResult() {
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('result').innerHTML = 'Skor Anda: ' + score + ' dari ' + questions.length;
+      document.getElementById('restart-btn').style.display = 'block';
+    }
+
+    // Mengulangi permainan
+    function restartGame() {
+      currentQuestionIndex = 0;
+      score = 0;
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('result').innerHTML = '';
+      document.getElementById('restart-btn').style.display = 'none';
+      displayQuestion();
+    }
+
+    // Memanggil fungsi displayQuestion saat halaman dimuat
+    window.onload = displayQuestion;
+  </script>
+
+</body>
+</html>
